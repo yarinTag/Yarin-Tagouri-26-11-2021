@@ -20,9 +20,7 @@ const FavoritesPage: FC = () => {
         <Container>
           <Grid container spacing={3} sx={{ justifyContent: "center" }}>
             {favorites.map((favo: any) => (
-              <Grid item xs={12} md={3} lg={2} key={favo.id}>
-                <FavoriteCard favo={favo} />
-              </Grid>
+              <FavoriteCard favo={favo} key={favo.id} />
             ))}
           </Grid>
         </Container>

@@ -10,6 +10,7 @@ import { fetchCurrentWeather } from "../../../redux/slices/currentSlices";
 import { fetchFiveDaysOfDaily } from "../../../redux/slices/dailyForecastsSliceSlices";
 import { FavoriteWeatherProps } from "../../../types";
 import { fetchAutoCompleteLocations } from "../../../redux/slices/weatherSlices";
+import { addToFavorites } from "../../../redux/slices/favoriteSlices";
 
 const HomePage: FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const HomePage: FC = () => {
         location: "Tel Aviv",
         temp: { celsius: 20.6, fahrenheit: 69 },
       };
-      localStorage.setItem("favorites", JSON.stringify([favo]));
+      dispatch(addToFavorites(favo));
     }
   }, []);
   return (

@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 //Imports Projects
 import IconComp from "../../../../../../shared/IconComp";
 import { addToFavorites } from "../../../../../../redux/slices/favoriteSlices";
-import { CurrentDetails, StyledWTemper } from "./Current.style";
+import { CurrentDetails } from "./Current.style";
 import { AutoWeatherProps, CurrentWeatherProps } from "../../../../../../types";
 
 interface CurrentProps {
@@ -94,9 +94,13 @@ const Current: FC<CurrentProps> = ({ weather, currentWeather }) => {
 
                 <IconComp src={currentWeather ? currentWeather.icon : null} />
 
-                <StyledWTemper
-                  temper={currentWeather ? currentWeather.temp.celsius : null}
-                />
+                <Typography
+                  variant="h4"
+                  component="h4"
+                  sx={{ textAlign: "center" }}
+                >
+                  {currentWeather ? currentWeather.temp.celsius : null} °
+                </Typography>
               </CurrentDetails>
             </CardMedia>
           </div>

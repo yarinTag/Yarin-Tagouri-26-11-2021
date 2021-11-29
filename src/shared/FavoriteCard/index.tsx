@@ -1,9 +1,15 @@
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 
 //Imports Projects
-import TemperComp from "../TemperComp";
 import paths from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { fetchCurrentWeather } from "../../redux/slices/currentSlices";
@@ -24,20 +30,21 @@ const FavoriteCard: FC<FavoriteProps> = ({ favo }) => {
     navigate(paths.HOME, favo);
   };
   return (
-    <div>
+    <Grid item>
       <Card onClick={onPress}>
-        <CardHeader title={favo.location} subheader={favo.description} />
-        <CardContent>
-          <TemperComp temper={favo.temp.celsius} />
+        <CardContent sx={{ minWidth: 200 }}>
+          <CardHeader
+            title={favo.location}
+            subheader={favo.description}
+            sx={{ fontSize: 17, fontWeight: "bold", textAlign: "center" }}
+          />
+          <Typography variant="h4" component="h4" sx={{ textAlign: "center" }}>
+            {favo.temp.celsius} °
+          </Typography>
+          <CardMedia component="img" sx={{ width: 150 }} image={favo.icon} />
         </CardContent>
-        <CardMedia
-          component="img"
-          sx={{ width: 150 }}
-          image={favo.icon}
-          alt="Live from space album cover"
-        />
       </Card>
-    </div>
+    </Grid>
   );
 };
 

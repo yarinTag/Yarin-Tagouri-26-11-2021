@@ -13,11 +13,9 @@ const Daily: FC<DailyForecastsProps | any> = ({ dailyForecasts }) => {
     <>
       {dailyForecasts && weather[0] ? (
         <Container>
-          <Grid container spacing={3} columns={{ lg: 10, xl: 10, xs: 10 }}>
-            {dailyForecasts.map((day: any, key: number) => (
-              <Grid item xs={12} md={3} lg={2} key={key}>
-                <DailyItem key={day.epochDate} day={day} />
-              </Grid>
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
+            {dailyForecasts.map((day: any) => (
+              <DailyItem key={day.epochDate} day={day} />
             ))}
           </Grid>
         </Container>

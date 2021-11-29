@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardMedia,
   Tooltip,
+  Typography,
+  Grid,
 } from "@mui/material";
-
-//Imports Projects
-import TemperComp from "../../../../../../shared/TemperComp";
 
 const DailyItem = ({ day }: any) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -23,7 +22,7 @@ const DailyItem = ({ day }: any) => {
   }, [isMobile]);
 
   return (
-    <div>
+    <Grid item>
       <Tooltip title={day.description} placement="top" arrow>
         {/* <Hidden smUp>
           <Typography variant="body2">{day.description}</Typography>
@@ -35,19 +34,35 @@ const DailyItem = ({ day }: any) => {
             display: isMobile ? "flex" : "block",
           }}
         >
-          <CardHeader title={moment.unix(day.epochDate).format("ddd")} />
-          <CardContent>
-            <TemperComp temper={day?.minTemp?.celsius} />
-            <TemperComp temper={day?.maxTemp?.celsius} color="textSecondary" />
+          <CardContent sx={{ minWidth: 150 }}>
+            <CardHeader
+              title={moment.unix(day.epochDate).format("ddd")}
+              sx={{ fontSize: 17, fontWeight: "bold", textAlign: "center" }}
+            />
+            <Typography
+              variant="h6"
+              component="h4"
+              sx={{ textAlign: "center", fontWeight: "bold" }}
+            >
+              {day?.minTemp?.celsius}°
+            </Typography>
+            <Typography
+              variant="h6"
+              component="h4"
+              sx={{ textAlign: "center" }}
+            >
+              {day?.maxTemp?.celsius}°
+            </Typography>
+
+            <CardMedia
+              component="img"
+              sx={{ width: isMobile ? 45 : 100 }}
+              image={day.icon}
+            />
           </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: isMobile ? "35%" : "100px" }}
-            image={day.icon}
-          />
         </Card>
       </Tooltip>
-    </div>
+    </Grid>
   );
 };
 
