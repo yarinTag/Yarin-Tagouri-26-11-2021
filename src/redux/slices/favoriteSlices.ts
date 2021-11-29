@@ -1,19 +1,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { FavoriteWeatherProps } from "../../types";
 
+function toastify() {
+  toast.success("Added to favorites!", {
+    position: "bottom-right",
+    autoClose: 2500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+}
 //Action
 export const addToFavorites = createAsyncThunk(
   "favoritesWeather/fetch",
-  async (payload: any, { rejectWithValue, getState, dispatch }) => {
+  async (payload: FavoriteWeatherProps, { rejectWithValue, getState, dispatch }) => {
     try {
       if (localStorage.getItem("favorites") === null) {
         localStorage.setItem("favorites", JSON.stringify([payload]));
-        return [...payload];
+        return [payload];
       } else {
         let favorites: any;
         if ((localStorage.getItem("favorites") || "[]") === "[]") {
           localStorage.removeItem("favorites");
           favorites = [payload];
           localStorage.setItem("favorites", JSON.stringify(favorites));
+          toastify();
           return favorites;
         } else
           favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -23,7 +37,17 @@ export const addToFavorites = createAsyncThunk(
 
         if (index >= 0) {
           newFavorites.splice(index, 1);
+          toast.error("Removed from favorites!", {
+            position: "bottom-right",
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } else {
+          toastify();
           newFavorites.push(payload);
         }
         localStorage.setItem("favorites", JSON.stringify(newFavorites));

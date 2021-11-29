@@ -37,3 +37,11 @@ export interface AutoWeatherProps {
     localizedName: string;
   };
 }
+
+export interface FavoriteWeatherProps {
+  description: string;
+  icon: string;
+  id: string;
+  location: string;
+  temp: { celsius: number; fahrenheit: number };
+}

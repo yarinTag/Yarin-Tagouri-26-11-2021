@@ -42,7 +42,7 @@ const DailyItem = ({ day }: any) => {
           </CardContent>
           <CardMedia
             component="img"
-            sx={{ width: isMobile ? "35%" : "auto" }}
+            sx={{ width: isMobile ? "35%" : "100px" }}
             image={day.icon}
           />
         </Card>

@@ -3,15 +3,28 @@ import { FC } from "react";
 //Imports Projects
 import Current from "./Current";
 import Daily from "./Daily";
-import { DailyForecastsProps } from "../../../../../types";
+import {
+  AutoWeatherProps,
+  CurrentWeatherProps,
+  DailyForecastsProps,
+} from "../../../../../types";
 import { Card, CardContent, Grid } from "@mui/material";
 
-const WeatherCard: FC<DailyForecastsProps | any> = ({ dailyForecasts }) => {
+interface WeatherCardProps {
+  dailyForecasts: DailyForecastsProps | any;
+  weather: AutoWeatherProps;
+  currentWeather: CurrentWeatherProps;
+}
+const WeatherCard: FC<WeatherCardProps> = ({
+  dailyForecasts,
+  currentWeather,
+  weather,
+}) => {
   return (
     <Grid container sx={{ width: "100%" }}>
       <Card variant="outlined" sx={{ width: "100%" }}>
         <CardContent>
-          <Current />
+          <Current weather={weather} currentWeather={currentWeather} />
 
           <Daily dailyForecasts={dailyForecasts} />
         </CardContent>

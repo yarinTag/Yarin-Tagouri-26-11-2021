@@ -8,16 +8,22 @@ import {
   Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Imports Projects
 import IconComp from "../../../../../../shared/IconComp";
 import { addToFavorites } from "../../../../../../redux/slices/favoriteSlices";
 import { CurrentDetails, StyledWTemper } from "./Current.style";
+import { AutoWeatherProps, CurrentWeatherProps } from "../../../../../../types";
 
-const Current: FC = () => {
+interface CurrentProps {
+  weather: AutoWeatherProps | any;
+  currentWeather: CurrentWeatherProps;
+}
+
+const Current: FC<CurrentProps> = ({ weather, currentWeather }) => {
   const dispatch = useDispatch();
-  const { currentWeather } = useSelector((state: any) => state.currentSlices);
-  const { weather } = useSelector((state: any) => state.weatherReducer);
   const { favoritesWeather } = useSelector(
     (state: any) => state.favoriteSlices
   );
@@ -43,8 +49,6 @@ const Current: FC = () => {
       return true;
     else {
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      console.log("here");
-
       const added = favorites.findIndex((f: any) => f.id === weather[0].Key);
       if (added > 0) return true;
       else return false;
@@ -54,6 +58,7 @@ const Current: FC = () => {
     let title: string;
     if (added) title = "Remove from favorites";
     else title = "Add to favorites";
+
     return title;
   }
 
@@ -95,6 +100,7 @@ const Current: FC = () => {
               </CurrentDetails>
             </CardMedia>
           </div>
+          <ToastContainer />
         </>
       ) : (
         ""

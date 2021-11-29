@@ -1,5 +1,4 @@
-import { FC, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { FC } from "react";
 
 import { CircularProgress, Container, Typography } from "@mui/material";
 import { LoadingWrapper } from "./Result.style";
@@ -16,11 +15,6 @@ const Result: FC<ResultProps> = ({
   children,
   locationFound,
 }) => {
-  const { currentWeatherOk } = useSelector((state: any) => state.currentSlices);
-  const { dailyForecastsOk } = useSelector(
-    (state: any) => state.dailyForecastsSliceSlices
-  );
-  useEffect(() => {}, [dailyForecastsOk, currentWeatherOk]);
   return (
     <>
       <Container sx={{ width: "100%", margin: "25px 0px" }}>

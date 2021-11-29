@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 import { CurrentWeatherProps } from "../../types";
 import { featchWeatherIconUrl } from "./dailyForecastsSliceSlices";
-
 import { defaultParams } from "./weatherSlices";
 import temperatureUnits from "../../constants/constants";
 
@@ -37,7 +38,18 @@ export const fetchCurrentWeather = createAsyncThunk(
         });
       return res;
     } catch (error: any) {
-      if (!error?.response) throw error;
+      if (!error?.response) {
+        toast.error("Unable to reach server . . .", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        throw error;
+      }
       return rejectWithValue(error?.response?.data);
     }
   }

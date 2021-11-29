@@ -58,7 +58,6 @@ const weatherSlice = createSlice({
     //Rejected
     builder.addCase(fetchAutoCompleteLocations.rejected, (state, action) => {
       state.loading = false;
-      state.weather = null;
       state.error = action?.payload;
     });
   },
