@@ -33,14 +33,12 @@ const Current: FC = () => {
     dispatch(addToFavorites(favorites));
   }
   function isInFavorites() {
-    let isIn: boolean = false;
     if (favoritesWeather) {
       const added = favoritesWeather.findIndex(
         (f: any) => f.id === weather[0].Key
       );
-      if (added > 0) isIn = true;
-      else isIn = false;
-      console.log("here1");
+      if (added > 0) return true;
+      else return false;
     } else if ((localStorage.getItem("favorites") || "[]") === "[]")
       return true;
     else {
@@ -48,12 +46,9 @@ const Current: FC = () => {
       console.log("here");
 
       const added = favorites.findIndex((f: any) => f.id === weather[0].Key);
-      if (added > 0) isIn = true;
-      else isIn = false;
+      if (added > 0) return true;
+      else return false;
     }
-    console.log(isIn);
-
-    return isIn;
   }
   function getTextHover(added: boolean): string {
     let title: string;
