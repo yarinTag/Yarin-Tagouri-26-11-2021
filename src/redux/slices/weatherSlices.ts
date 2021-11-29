@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AutoWeatherProps } from "../../types";
 
 export const defaultParams = {
-  apikey: `${process.env.REACT_APP_API_KEY}`,
+  apikey: "AD9i2mfrpq0S2tAFi8o5JtLbWjp2q9bC",
   language: "en-us",
 };
 
