@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { isEmpty } from "lodash";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,10 +26,10 @@ const HomePage: FC = () => {
   const { currentWeather } = useSelector((state: any) => state.currentSlices);
 
   useEffect(() => {
-    dispatch(fetchAutoCompleteLocations("Tel Aviv"));
-    dispatch(fetchCurrentWeather("215854"));
-    dispatch(fetchFiveDaysOfDaily("215854"));
     if (!localStorage.getItem("favorites")) {
+      dispatch(fetchAutoCompleteLocations("Tel Aviv"));
+      dispatch(fetchCurrentWeather("215854"));
+      dispatch(fetchFiveDaysOfDaily("215854"));
       const favo: FavoriteWeatherProps = {
         description: "Cloudy",
         icon: "https://vortex.accuweather.com/adc2010/images/slate/icons/7.svg",
@@ -45,7 +46,7 @@ const HomePage: FC = () => {
       <Result
         loading={loading}
         notFound={"No location selected"}
-        locationFound={weather !== null}
+        locationFound={!isEmpty(weather)}
       >
         <WeatherCard
           dailyForecasts={dailyForecasts}

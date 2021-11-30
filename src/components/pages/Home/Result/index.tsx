@@ -15,6 +15,7 @@ const Result: FC<ResultProps> = ({
   children,
   locationFound,
 }) => {
+  
   return (
     <>
       <Container sx={{ width: "100%", margin: "25px 0px" }}>

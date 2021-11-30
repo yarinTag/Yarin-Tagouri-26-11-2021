@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import { Container, Grid } from "@mui/material";
+import { isEmpty } from "lodash";
 
 import Result from "../Home/Result";
 import FavoriteCard from "../../../shared/FavoriteCard";
@@ -15,7 +16,7 @@ const FavoritesPage: FC = () => {
       <Result
         loading={favoritesWeatherLoading}
         notFound={"Not favorites added"}
-        locationFound={favorites !== []}
+        locationFound={!isEmpty(favorites)}
       >
         <Container>
           <Grid container spacing={3} sx={{ justifyContent: "center" }}>
