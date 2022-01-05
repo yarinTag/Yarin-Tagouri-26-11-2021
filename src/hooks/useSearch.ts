@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentWeather } from "../redux/slices/currentSlices";
 import { fetchFiveDaysOfDaily } from "../redux/slices/dailyForecastsSliceSlices";
+import { addToFavorites } from "../redux/slices/favoriteSlices";
 import { fetchAutoCompleteLocations } from "../redux/slices/weatherSlices";
+import { FavoriteWeatherProps } from "../types";
 
 const useSearch = () => {
   const dispatch = useDispatch();
@@ -35,6 +37,24 @@ const useSearch = () => {
       dispatch(fetchFiveDaysOfDaily(null));
     }
   };
+
+  useEffect(() => {
+    if (term.length < 1) {
+      dispatch(fetchAutoCompleteLocations("Tel Aviv"));
+      dispatch(fetchCurrentWeather("215854"));
+      dispatch(fetchFiveDaysOfDaily("215854"));
+      if (!localStorage.getItem("favorites")) {
+        const favo: FavoriteWeatherProps = {
+          description: "Cloudy",
+          icon: "https://vortex.accuweather.com/adc2010/images/slate/icons/7.svg",
+          id: "215854",
+          location: "Tel Aviv",
+          temp: { celsius: 20.6, fahrenheit: 69 },
+        };
+        dispatch(addToFavorites(favo));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const timeOutId = setTimeout(() => onInputChange(), 500);
