@@ -1,50 +1,25 @@
-import { FC, useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-import { Autocomplete, TextField } from "@mui/material";
+import { FC } from "react";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 
 //Imports projects
 import { StyledSearchComp } from "./SearchComp.style";
-import { fetchCurrentWeather } from "../../../../redux/slices/currentSlices";
-import { fetchFiveDaysOfDaily } from "../../../../redux/slices/dailyForecastsSliceSlices";
-import { fetchAutoCompleteLocations } from "../../../../redux/slices/weatherSlices";
+import useSearch from "../../../../hooks/useSearch";
 
 const SearchComp: FC = () => {
-  const dispatch = useDispatch();
-  const [options, setOptions] = useState([]);
-  const { weather, loading } = useSelector(
-    (state: any) => state.weatherReducer
-  );
-
-  const handleChange = (event: React.SyntheticEvent, value: string) => {
-    if (value.length > 1) dispatch(fetchAutoCompleteLocations(value));
-  };
-  const handleSelect = (event: React.SyntheticEvent, option: any) => {
-    dispatch(fetchAutoCompleteLocations(option?.LocalizedName));
-    if (option?.Key) {
-      dispatch(fetchCurrentWeather(option?.Key));
-      dispatch(fetchFiveDaysOfDaily(option?.Key));
-    }
-  };
-
-  useEffect(() => {
-    if (weather) {
-      setOptions(weather);
-    }
-  }, [weather]);
+  const { weather, loading, setTerm, handleSelect } = useSearch();
 
   return (
     <>
       <StyledSearchComp>
         <Autocomplete
-          options={options}
+          options={weather}
           getOptionLabel={(option: any) =>
             `${option.AdministrativeArea?.ID}, ${option.AdministrativeArea.LocalizedName}, ${option.Country?.ID}`
           }
           fullWidth
           loading={loading}
-          onInputChange={handleChange}
-          onChange={handleSelect}
+          onInputChange={(event, value) => setTerm(value)}
+          onChange={(event, option) => handleSelect(event, option)}
           isOptionEqualToValue={(option: {}, value: {}) => option === value}
           renderInput={(params) => (
             <TextField
@@ -52,6 +27,17 @@ const SearchComp: FC = () => {
               fullWidth
               label="Type for location"
               placeholder="Location"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {loading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
             />
           )}
         />

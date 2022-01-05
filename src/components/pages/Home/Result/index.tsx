@@ -26,7 +26,7 @@ const Result: FC<ResultProps> = ({
           </Typography>
         )}
 
-        <LoadingWrapper>
+        <LoadingWrapper isLoading={loading}>
           <CircularProgress />
         </LoadingWrapper>
       </Container>

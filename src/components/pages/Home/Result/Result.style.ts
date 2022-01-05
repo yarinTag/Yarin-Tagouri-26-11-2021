@@ -1,8 +1,10 @@
 import styled from "styled-components";
-
-export const LoadingWrapper = styled.div`
+interface Props {
+  isLoading: boolean;
+}
+export const LoadingWrapper = styled.div<Props>`
   position: absolute;
-  display: ${({ isLoading }: any) => (isLoading ? "flex" : "none")};
+  display: ${({ isLoading }) => (isLoading ? "flex" : "none")};
   flex-direction: column;
   justify-content: center;
   align-items: center;

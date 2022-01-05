@@ -16,48 +16,50 @@ export const changeToFahrenheit = (cel: number) => (cel * 9) / 5 + 32;
 //Action
 export const fetchFiveDaysOfDaily = createAsyncThunk(
   "dailyForecasts/fetch",
-  async (payload: string, { rejectWithValue, getState, dispatch }) => {
-    try {
-      const params = {
-        metric: true,
-        ...defaultParams,
-      };
-      const locationKey = payload;
-      const res = await axios
-        .get(
-          `${process.env.REACT_APP_ACCU_WEATHER_URL}forecasts/v1/daily/5day/${locationKey}`,
-          { params }
-        )
-        .then((res) => {
-          const daysOfForecastsData = res.data.DailyForecasts;
-          const daysOfForecasts = daysOfForecastsData.map((day: any) => {
-            const icon = day.Day.Icon;
-            const minCel = day.Temperature.Minimum.Value;
-            const maxCel = day.Temperature.Maximum.Value;
-            const epochDate = day.EpochDate;
-            const description = day.Day.IconPhrase;
+  async (payload: string | null, { rejectWithValue, getState, dispatch }) => {
+    if (payload === null) return null;
+    else
+      try {
+        const params = {
+          metric: true,
+          ...defaultParams,
+        };
+        const locationKey = payload;
+        const res = await axios
+          .get(
+            `${process.env.REACT_APP_ACCU_WEATHER_URL}forecasts/v1/daily/5day/${locationKey}`,
+            { params }
+          )
+          .then((res) => {
+            const daysOfForecastsData = res.data.DailyForecasts;
+            const daysOfForecasts = daysOfForecastsData.map((day: any) => {
+              const icon = day.Day.Icon;
+              const minCel = day.Temperature.Minimum.Value;
+              const maxCel = day.Temperature.Maximum.Value;
+              const epochDate = day.EpochDate;
+              const description = day.Day.IconPhrase;
 
-            return {
-              icon: featchWeatherIconUrl(icon),
-              epochDate,
-              description,
-              minTemp: {
-                [temperatureUnits.CELSIUS]: minCel,
-                [temperatureUnits.FAHRENHEIT]: changeToFahrenheit(minCel),
-              },
-              maxTemp: {
-                [temperatureUnits.CELSIUS]: maxCel,
-                [temperatureUnits.FAHRENHEIT]: changeToFahrenheit(maxCel),
-              },
-            };
+              return {
+                icon: featchWeatherIconUrl(icon),
+                epochDate,
+                description,
+                minTemp: {
+                  [temperatureUnits.CELSIUS]: minCel,
+                  [temperatureUnits.FAHRENHEIT]: changeToFahrenheit(minCel),
+                },
+                maxTemp: {
+                  [temperatureUnits.CELSIUS]: maxCel,
+                  [temperatureUnits.FAHRENHEIT]: changeToFahrenheit(maxCel),
+                },
+              };
+            });
+            return daysOfForecasts;
           });
-          return daysOfForecasts;
-        });
-      return res;
-    } catch (error: any) {
-      if (!error?.response) throw error;
-      return rejectWithValue(error?.response?.data);
-    }
+        return res;
+      } catch (error: any) {
+        if (!error?.response) throw error;
+        return rejectWithValue(error?.response?.data);
+      }
   }
 );
 

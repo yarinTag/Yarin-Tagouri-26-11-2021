@@ -10,48 +10,50 @@ import temperatureUnits from "../../constants/constants";
 //Action
 export const fetchCurrentWeather = createAsyncThunk(
   "currentWeather/fetch",
-  async (payload: string, { rejectWithValue, getState, dispatch }) => {
-    try {
-      const params = {
-        q: payload,
-        ...defaultParams,
-      };
-      const locationKey = payload;
-      const res = await axios
-        .get(
-          `${process.env.REACT_APP_ACCU_WEATHER_URL}currentconditions/v1/${locationKey}`,
-          { params }
-        )
-        .then((res) => {
-          const currentWeatherData = res.data[0];
-          return {
-            icon: featchWeatherIconUrl(currentWeatherData.WeatherIcon),
-            epochDate: currentWeatherData.EpochTime,
-            description: currentWeatherData.WeatherText,
-            temp: {
-              [temperatureUnits.CELSIUS]:
-                currentWeatherData.Temperature.Metric.Value,
-              [temperatureUnits.FAHRENHEIT]:
-                currentWeatherData.Temperature.Imperial.Value,
-            },
-          };
-        });
-      return res;
-    } catch (error: any) {
-      if (!error?.response) {
-        toast.error("Unable to reach server . . .", {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        throw error;
+  async (payload: string | null, { rejectWithValue, getState, dispatch }) => {
+    if (payload === null) return null;
+    else
+      try {
+        const params = {
+          q: payload,
+          ...defaultParams,
+        };
+        const locationKey = payload;
+        const res = await axios
+          .get(
+            `${process.env.REACT_APP_ACCU_WEATHER_URL}currentconditions/v1/${locationKey}`,
+            { params }
+          )
+          .then((res) => {
+            const currentWeatherData = res.data[0];
+            return {
+              icon: featchWeatherIconUrl(currentWeatherData.WeatherIcon),
+              epochDate: currentWeatherData.EpochTime,
+              description: currentWeatherData.WeatherText,
+              temp: {
+                [temperatureUnits.CELSIUS]:
+                  currentWeatherData.Temperature.Metric.Value,
+                [temperatureUnits.FAHRENHEIT]:
+                  currentWeatherData.Temperature.Imperial.Value,
+              },
+            };
+          });
+        return res;
+      } catch (error: any) {
+        if (!error?.response) {
+          toast.error("Unable to reach server . . .", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          throw error;
+        }
+        return rejectWithValue(error?.response?.data);
       }
-      return rejectWithValue(error?.response?.data);
-    }
   }
 );
 

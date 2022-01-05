@@ -11,31 +11,33 @@ export const defaultParams = {
 //Action
 export const fetchAutoCompleteLocations = createAsyncThunk(
   "weather/fetch",
-  async (payload: string, { rejectWithValue, getState, dispatch }) => {
-    try {
-      const params = {
-        q: payload,
-        ...defaultParams,
-      };
-      const res = await axios.get(
-        `${process.env.REACT_APP_ACCU_WEATHER_URL}locations/v1/cities/autocomplete`,
-        { params }
-      );
-      return res.data;
-    } catch (error: any) {
-      if (!error?.response) throw error;
-      return rejectWithValue(error?.response?.data);
-    }
+  async (payload: string | null, { rejectWithValue, getState, dispatch }) => {
+    if (payload === null) return [];
+    else
+      try {
+        const params = {
+          q: payload,
+          ...defaultParams,
+        };
+        const res = await axios.get(
+          `${process.env.REACT_APP_ACCU_WEATHER_URL}locations/v1/cities/autocomplete`,
+          { params }
+        );
+        return res.data;
+      } catch (error: any) {
+        if (!error?.response) throw error;
+        return rejectWithValue(error?.response?.data);
+      }
   }
 );
 
 interface PropsAutocomplete {
-  weather: AutoWeatherProps | AutoWeatherProps[] | null;
+  weather: AutoWeatherProps | AutoWeatherProps[] | [];
   loading: boolean;
   error: any | null;
 }
 const initialState: PropsAutocomplete = {
-  weather: null,
+  weather: [],
   loading: false,
   error: null,
 };
