@@ -39,18 +39,18 @@ const Current: FC<CurrentProps> = ({ weather, currentWeather }) => {
     dispatch(addToFavorites(favorites));
   }
   function isInFavorites() {
-    if (favoritesWeather) {
+    if (favoritesWeather && weather !== []) {
       const added = favoritesWeather.findIndex(
-        (f: any) => f.id === weather[0].Key
+        (f: any) => f.id === weather[0]?.Key
       );
-      if (added > 0) return true;
+      if (added >= 0) return true;
       else return false;
     } else if ((localStorage.getItem("favorites") || "[]") === "[]")
-      return true;
+      return false;
     else {
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const added = favorites.findIndex((f: any) => f.id === weather[0].Key);
-      if (added > 0) return true;
+      const added = favorites.findIndex((f: any) => f.id === weather[0]?.Key);
+      if (added >= 0) return true;
       else return false;
     }
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentWeather } from "../redux/slices/currentSlices";
 import { fetchFiveDaysOfDaily } from "../redux/slices/dailyForecastsSliceSlices";
@@ -18,11 +18,11 @@ const useSearch = () => {
   );
   const { currentWeather } = useSelector((state: any) => state.currentSlices);
 
-  const onInputChange = () => {
+  const onInputChange = useCallback(() => {
     if (term.length >= 2) {
       dispatch(fetchAutoCompleteLocations(term));
     }
-  };
+  }, [term, dispatch]);
 
   const handleSelect = (event: React.SyntheticEvent, option: any) => {
     if (option !== null) {
@@ -39,28 +39,26 @@ const useSearch = () => {
   };
 
   useEffect(() => {
-    if (term.length < 1) {
-      dispatch(fetchAutoCompleteLocations("Tel Aviv"));
-      dispatch(fetchCurrentWeather("215854"));
-      dispatch(fetchFiveDaysOfDaily("215854"));
-      if (!localStorage.getItem("favorites")) {
-        const favo: FavoriteWeatherProps = {
-          description: "Cloudy",
-          icon: "https://vortex.accuweather.com/adc2010/images/slate/icons/7.svg",
-          id: "215854",
-          location: "Tel Aviv",
-          temp: { celsius: 20.6, fahrenheit: 69 },
-        };
-        dispatch(addToFavorites(favo));
-      }
+    dispatch(fetchAutoCompleteLocations("Tel Aviv"));
+    dispatch(fetchCurrentWeather("215854"));
+    dispatch(fetchFiveDaysOfDaily("215854"));
+    if (!localStorage.getItem("favorites")) {
+      const favo: FavoriteWeatherProps = {
+        description: "Cloudy",
+        icon: "https://vortex.accuweather.com/adc2010/images/slate/icons/7.svg",
+        id: "215854",
+        location: "Tel Aviv",
+        temp: { celsius: 20.6, fahrenheit: 69 },
+      };
+      dispatch(addToFavorites(favo));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const timeOutId = setTimeout(() => onInputChange(), 500);
 
     return () => clearTimeout(timeOutId);
-  }, [term]);
+  }, [term, onInputChange]);
 
   return {
     weather,
